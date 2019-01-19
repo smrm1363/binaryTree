@@ -31,7 +31,7 @@ public class NodeData {
     public String toString() {
         String result=" "+totalNumber.toString()+" ";
         if(word!=null)
-            result = word+" total :"+result;
+            result = word+" "+result;
         return result;
     }
 }

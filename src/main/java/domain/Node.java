@@ -1,5 +1,11 @@
 package domain;
 
+import java.util.ArrayDeque;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.stream.Collectors;
+
 public class Node {
     private final int count = 10;
     private NodeData data;
@@ -36,6 +42,28 @@ public class Node {
         print2DTree(root.left, space);
     }
 
+    public Node generateTree(Map<String,Integer> leaves)
+    {
+        //// TODO: 1/19/2019      https://stackoverflow.com/questions/10367765/creating-a-sum-tree-from-leafs 
+        Queue<Node> queue = new ArrayDeque<>();
+                leaves.entrySet().stream().sorted(Map.Entry.comparingByValue())
+                .forEach(stringIntegerEntry ->
+                {
+                    Node node = new Node(new NodeData(stringIntegerEntry.getKey(),stringIntegerEntry.getValue()));
+                    queue.add(node);
+                });
+
+                while (queue.size()>1)
+                {
+                   Node firstNode = queue.remove();
+                   Node secondNode = queue.remove();
+                   Node parrent  = new Node(new NodeData(null,firstNode.getData().getTotalNumber()+secondNode.getData().getTotalNumber()));
+                   parrent.setLeft(firstNode);
+                   parrent.setRight(secondNode);
+                    queue.add(parrent);
+                }
+                return queue.remove();
+    }
     public void print2DTree(Node root)
     {
         print2DTree(root,0);

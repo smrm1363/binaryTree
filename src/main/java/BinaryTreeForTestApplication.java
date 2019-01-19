@@ -1,3 +1,4 @@
+import domain.FileReader;
 import domain.Node;
 import domain.NodeData;
 
@@ -14,6 +15,14 @@ public class BinaryTreeForTestApplication {
 
         System.out.println("other tree :");
         tree.print2DTree(tree);
+
+        Integer x = null;
+        System.out.println("............."+x+1);
+
+        FileReader fileReader = FileReader.getInstance();
+        tree = tree.generateTree(fileReader.readFileWordCount("C:\\Users\\hurie&mohamadreza\\Downloads\\input001.txt"));
+        tree.print2DTree(tree);
+        System.out.println("****");
 
     }
 }
