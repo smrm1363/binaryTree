@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class FileReader {
@@ -21,8 +22,11 @@ public class FileReader {
             fileReader=new FileReader();
         return fileReader;
     }
-    public Map<String,Integer> readFileWordCount(String path)
-    {
+    public Map<String,Integer> readFileWordCount(String path) throws ApplicationException {
+        String regularExpression = "^(?:[\\w]\\:|\\\\)(\\\\[a-z_\\-\\s0-9\\.]+)+\\.(txt)$\n";
+        Pattern regexp =Pattern.compile(regularExpression);
+        if(!regexp.matcher(path).find())
+            throw new ApplicationException("File format is not correct, this program only support .txt files");
         Map<String,Integer> result = new ConcurrentHashMap<>();
         try (Stream<String> stream = Files.lines(Paths.get(path))) {
 

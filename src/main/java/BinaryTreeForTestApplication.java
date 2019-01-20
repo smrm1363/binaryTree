@@ -1,28 +1,24 @@
-import domain.FileReader;
-import domain.Node;
-import domain.NodeData;
+import domain.*;
 
 public class BinaryTreeForTestApplication {
 
-    public static void main(String[] args) {
-        System.out.println("Hiiiiii");
-        Node tree = new Node((new NodeData(null,10)));
+
+    public static void main(String[] args) throws ApplicationException {
+//        System.out.println("Hiiiiii");
+//        Node tree = new Node((new NodeData(null,10)));
 //
-//        tree.setLeft(new Node(new NodeData(null,5)));
-//        tree.setRight(new Node(new NodeData("Ali",2)));
-//        tree.getLeft().setRight(new Node(new NodeData("Mammad",2)));
-//     //   tree.printTree(tree.getRoot());
 //
-//        System.out.println("other tree :");
+//        Integer x = null;
+//        System.out.println("............."+x+1);
+//
+//        FileReader fileReader = FileReader.getInstance();
+//        tree = tree.generateTree(fileReader.readFileWordCount("C:\\Users\\hurie&mohamadreza\\Downloads\\input001.txt"));
 //        tree.print2DTree(tree);
+//        System.out.println("****");
 
-        Integer x = null;
-        System.out.println("............."+x+1);
-
-        FileReader fileReader = FileReader.getInstance();
-        tree = tree.generateTree(fileReader.readFileWordCount("E:\\projects\\myself\\Germany\\TestData.txt"));
-        tree.print2DTree(tree);
-        System.out.println("****");
-
+        if(args.length <1)
+            throw new ApplicationException("For running the program you should enter the path of the Text file as a parameter");
+        BinaryTreeService binaryTreeService = BinaryTreeService.getInstance();
+        binaryTreeService.createAndPrintBinaryTreeFromFile(args[0]);
     }
 }
