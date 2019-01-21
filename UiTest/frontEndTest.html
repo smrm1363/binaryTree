@@ -14,7 +14,8 @@
 <hr />
 <div id="dvCSV">
 </div>
-
+<textarea rows="10" cols="150" id="outputCsvTxt">
+</textarea>
 <script>
 //  function handleFileSelect(evt) {
 //    var files = evt.target.files; // FileList object
@@ -49,44 +50,118 @@ function handleFileSelect(evt) {
 var separators = [' ', ','];
 
 
-  function Upload() {
-      var fileUpload = document.getElementById("fileUpload");
-      var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
-      if (regex.test(fileUpload.value.toLowerCase())) {
-          if (typeof (FileReader) != "undefined") {
-              var reader = new FileReader();
-              reader.onload = function (e) {
-                  var table = document.createElement("table");
-                  var rows = e.target.result.split("\n");
-                  for (var i = 0; i < rows.length; i++) {
-                      var cells = rows[i].split(new RegExp(separators.join('|'), 'g'));
+//  function Upload() {
+//      var fileUpload = document.getElementById("fileUpload");
+//      var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
+//      if (regex.test(fileUpload.value.toLowerCase())) {
+//          if (typeof (FileReader) != "undefined") {
+//              var reader = new FileReader();
+//              reader.onload = function (e) {
+//                  var table = document.createElement("table");
+//                  var rows = e.target.result.split("\n");
+//                  for (var i = 0; i < rows.length; i++) {
+//                      var cells = rows[i].split(new RegExp(separators.join('|'), 'g'));
+//
+//                      if (cells.length > 1) {
+//                          var row = table.insertRow(-1);
+//                          for (var j = 0; j < cells.length; j++) {
+//                              var cell = row.insertCell(-1);
+//                              cell.innerHTML = cells[j];
+//                          }
+//                      }
+//                  }
+//
+//                  var inputtedCsvTxt = document.getElementById('inputtedCsvTxt');
+//
+//
+//                  inputtedCsvTxt.value =e.target.result;
+//
+//                  var dvCSV = document.getElementById("dvCSV");
+//                  dvCSV.innerHTML = "";
+//                  dvCSV.appendChild(table);
+//              }
+//              reader.readAsText(fileUpload.files[0]);
+//          } else {
+//              alert("This browser does not support HTML5.");
+//          }
+//      } else {
+//          alert("Please upload a valid CSV file.");
+//      }
+//  }
 
-                      if (cells.length > 1) {
-                          var row = table.insertRow(-1);
-                          for (var j = 0; j < cells.length; j++) {
-                              var cell = row.insertCell(-1);
-                              cell.innerHTML = cells[j];
-                          }
-                      }
-                  }
-
-                  var inputtedCsvTxt = document.getElementById('inputtedCsvTxt');
 
 
-                  inputtedCsvTxt.value =e.target.result;
+function Upload() {
+    var fileUpload = document.getElementById("fileUpload");
+    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
+    if (regex.test(fileUpload.value.toLowerCase())) {
+        if (typeof (FileReader) != "undefined") {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var matrix = [];
+                var rows = e.target.result.split("\n");
+                for (var i = 0; i < rows.length; i++) {
+                    var cells = rows[i].split(/,| /);
 
-                  var dvCSV = document.getElementById("dvCSV");
-                  dvCSV.innerHTML = "";
-                  dvCSV.appendChild(table);
-              }
-              reader.readAsText(fileUpload.files[0]);
-          } else {
-              alert("This browser does not support HTML5.");
-          }
-      } else {
-          alert("Please upload a valid CSV file.");
-      }
-  }
+                    if (cells.length > 1) {
+
+                        for (var j = 0; j < cells.length; j++) {
+                            if(matrix[i]==null)
+                                matrix[i]=[];
+                           matrix[i][j]=cells[j];
+                        }
+                    }
+                }
+                var matrixOut = [];
+                for(var i=0; i<matrix.length;i++)
+                {
+                    for(var j=0; j< matrix[i].length;j++)
+                    {
+                        if(matrixOut[i]==null)
+                            matrixOut[i]=[];
+                        if(matrix[i][j]==0)
+                        {
+                            var x1 = (i - 1 >= 0 && j - 1 >= 0) ? matrix[i - 1][j - 1] : 0;
+                            var x2 = (j - 1 >= 0) ? matrix[i][j - 1] : 0;
+                            var x3 = (i + 1 < matrix.length && j - 1 >= 0) ? matrix[i + 1][j - 1] : 0;
+                            var x4 = (i - 1 >= 0) ? matrix[i - 1][j] : 0;
+                            var x5 = (i + 1 < matrix.length) ? matrix[i + 1][j] : 0;
+                            var x6 = (i - 1 >= 0 && j + 1 < matrix[i].length) ? matrix[i - 1][j + 1] : 0;
+                            var x7 = (j + 1 < matrix.length) ? matrix[i][j + 1] : 0;
+                            var x8 = (i + 1 < matrix.length && j + 1 < matrix[i].length) ? matrix[i + 1][j + 1] : 0;
+                            matrixOut[i][j] =
+                                (parseInt(x1)
+                                +parseInt(x2)
+                                +parseInt(x3)
+                                +parseInt(x4)
+                                +parseInt(x5)
+                                +parseInt(x6)
+                                +parseInt(x7)
+                                +parseInt(x8))/8;
+                        }
+                        else
+                            matrixOut[i][j] = matrix[i][j];
+                    }
+                }
+
+                var inputtedCsvTxt = document.getElementById('inputtedCsvTxt');
+                var outputCsvTxt = document.getElementById('outputCsvTxt');
+
+                inputtedCsvTxt.value =matrix;
+                outputCsvTxt.value = matrixOut;
+                var dvCSV = document.getElementById("dvCSV");
+                dvCSV.innerHTML = "";
+
+//                dvCSV.appendChild(table);
+            }
+            reader.readAsText(fileUpload.files[0]);
+        } else {
+            alert("This browser does not support HTML5.");
+        }
+    } else {
+        alert("Please upload a valid CSV file.");
+    }
+}
 </script>
 
 </body>
