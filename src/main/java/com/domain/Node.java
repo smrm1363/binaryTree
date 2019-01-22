@@ -1,7 +1,4 @@
-package domain;
-
-import java.util.*;
-import java.util.stream.Collectors;
+package com.domain;
 
 /**
  * This is a Node

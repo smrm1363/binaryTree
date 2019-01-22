@@ -1,4 +1,4 @@
-package domain;
+package com.domain;
 
 /**
  * This is a data type for each Node

@@ -2,94 +2,21 @@
 <html>
 <body>
 
-<!--<input type="file" id="files" name="files[]" multiple />-->
-<input type="file" id="files" />
-<output id="list"></output>
 
-
+<div>
 <input type="file" id="fileUpload" />
+</div>
+<div>
 <textarea rows="10" cols="150" id="inputtedCsvTxt">
 </textarea>
 <input type="button" id="upload" value="Upload" onclick="Upload()" />
+</div>
 <hr />
 <div id="dvCSV">
 </div>
 <textarea rows="10" cols="150" id="outputCsvTxt">
 </textarea>
 <script>
-//  function handleFileSelect(evt) {
-//    var files = evt.target.files; // FileList object
-//
-//    // files is a FileList of File objects. List some properties.
-//    var output = [];
-//    for (var i = 0, f; f = files[i]; i++) {
-//      output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-//                  f.size, ' bytes, last modified: ',
-//                  f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-//                  '</li>');
-//    }
-//    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-//  }
-
-function handleFileSelect(evt) {
-    var files = evt.target.file; // FileList object
-    var inputtedCsvTxt = document.getElementById('inputtedCsvTxt');
-    inputtedCsvTxt.value = files.read();
-    // files is a FileList of File objects. List some properties.
-//    var output = [];
-//    for (var i = 0, f; f = files[i]; i++) {
-//        output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-//            f.size, ' bytes, last modified: ',
-//            f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-//            '</li>');
-//    }
-//    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-}
-  document.getElementById('files').addEventListener('change', handleFileSelect, false);
-
-var separators = [' ', ','];
-
-
-//  function Upload() {
-//      var fileUpload = document.getElementById("fileUpload");
-//      var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
-//      if (regex.test(fileUpload.value.toLowerCase())) {
-//          if (typeof (FileReader) != "undefined") {
-//              var reader = new FileReader();
-//              reader.onload = function (e) {
-//                  var table = document.createElement("table");
-//                  var rows = e.target.result.split("\n");
-//                  for (var i = 0; i < rows.length; i++) {
-//                      var cells = rows[i].split(new RegExp(separators.join('|'), 'g'));
-//
-//                      if (cells.length > 1) {
-//                          var row = table.insertRow(-1);
-//                          for (var j = 0; j < cells.length; j++) {
-//                              var cell = row.insertCell(-1);
-//                              cell.innerHTML = cells[j];
-//                          }
-//                      }
-//                  }
-//
-//                  var inputtedCsvTxt = document.getElementById('inputtedCsvTxt');
-//
-//
-//                  inputtedCsvTxt.value =e.target.result;
-//
-//                  var dvCSV = document.getElementById("dvCSV");
-//                  dvCSV.innerHTML = "";
-//                  dvCSV.appendChild(table);
-//              }
-//              reader.readAsText(fileUpload.files[0]);
-//          } else {
-//              alert("This browser does not support HTML5.");
-//          }
-//      } else {
-//          alert("Please upload a valid CSV file.");
-//      }
-//  }
-
-
 
 function Upload() {
     var fileUpload = document.getElementById("fileUpload");
@@ -108,6 +35,11 @@ function Upload() {
                         for (var j = 0; j < cells.length; j++) {
                             if(matrix[i]==null)
                                 matrix[i]=[];
+                            if (!isInt(cells[j]))
+                            {
+                                alert("Data could be only integer value while '"+cells[j]+"' is not");
+                                return;
+                            }
                            matrix[i][j]=cells[j];
                         }
                     }
@@ -121,23 +53,27 @@ function Upload() {
                             matrixOut[i]=[];
                         if(matrix[i][j]==0)
                         {
-                            var x1 = (i - 1 >= 0 && j - 1 >= 0) ? matrix[i - 1][j - 1] : 0;
-                            var x2 = (j - 1 >= 0) ? matrix[i][j - 1] : 0;
-                            var x3 = (i + 1 < matrix.length && j - 1 >= 0) ? matrix[i + 1][j - 1] : 0;
-                            var x4 = (i - 1 >= 0) ? matrix[i - 1][j] : 0;
-                            var x5 = (i + 1 < matrix.length) ? matrix[i + 1][j] : 0;
-                            var x6 = (i - 1 >= 0 && j + 1 < matrix[i].length) ? matrix[i - 1][j + 1] : 0;
-                            var x7 = (j + 1 < matrix.length) ? matrix[i][j + 1] : 0;
-                            var x8 = (i + 1 < matrix.length && j + 1 < matrix[i].length) ? matrix[i + 1][j + 1] : 0;
-                            matrixOut[i][j] =
-                                (parseInt(x1)
-                                +parseInt(x2)
-                                +parseInt(x3)
-                                +parseInt(x4)
-                                +parseInt(x5)
-                                +parseInt(x6)
-                                +parseInt(x7)
-                                +parseInt(x8))/8;
+                            var tempValues=[];
+                            tempValues[0] = (i - 1 >= 0 && j - 1 >= 0) ?parseInt(matrix[i - 1][j - 1]) : 0;
+                            tempValues[1] = (j - 1 >= 0) ? parseInt(matrix[i][j - 1]) : 0;
+                            tempValues[2] = (i + 1 < matrix.length && j - 1 >= 0) ? parseInt(matrix[i + 1][j - 1]) : 0;
+                            tempValues[3] = (i - 1 >= 0) ? parseInt(matrix[i - 1][j]) : 0;
+                            tempValues[4] = (i + 1 < matrix.length) ? parseInt(matrix[i + 1][j]) : 0;
+                            tempValues[5] = (i - 1 >= 0 && j + 1 < matrix[i].length) ? parseInt(matrix[i - 1][j + 1]) : 0;
+                            tempValues[6] = (j + 1 < matrix.length) ? parseInt(matrix[i][j + 1]) : 0;
+                            tempValues[7] = (i + 1 < matrix.length && j + 1 < matrix[i].length) ? parseInt(matrix[i + 1][j + 1]) : 0;
+                            var count=0;
+                            var tempValue=0;
+                            for(var x = 0;x<tempValues.length;x++)
+                            {
+                                if(tempValues[x]>0)
+                                {
+                                    tempValue+=tempValues[x];
+                                    count++;
+                                }
+                            }
+                            matrixOut[i][j] = Math.round(tempValue/count);
+
                         }
                         else
                             matrixOut[i][j] = matrix[i][j];
@@ -151,8 +87,6 @@ function Upload() {
                 outputCsvTxt.value = matrixOut;
                 var dvCSV = document.getElementById("dvCSV");
                 dvCSV.innerHTML = "";
-
-//                dvCSV.appendChild(table);
             }
             reader.readAsText(fileUpload.files[0]);
         } else {
@@ -162,6 +96,17 @@ function Upload() {
         alert("Please upload a valid CSV file.");
     }
 }
+
+
+function isInt(value) {
+
+    if(!isNaN(value))
+        if(Number.isInteger(+value))
+            return true;
+    return false;
+
+}
+
 </script>
 
 </body>

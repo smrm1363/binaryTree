@@ -1,6 +1,6 @@
-package domain;
+package com.domain;
 
-import util.ReadPropertiesFile;
+import com.util.ReadPropertiesFile;
 
 import java.io.IOException;
 import java.util.*;

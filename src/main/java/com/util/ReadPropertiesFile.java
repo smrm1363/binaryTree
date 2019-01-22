@@ -1,8 +1,7 @@
-package util;
+package com.util;
 
 import java.io.*;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 
 /**

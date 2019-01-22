@@ -1,5 +1,8 @@
-import domain.*;
-import util.ReadPropertiesFile;
+package com;
+
+import com.domain.ApplicationException;
+import com.domain.BinaryTreeService;
+import com.util.ReadPropertiesFile;
 
 import java.io.IOException;
 
