@@ -1,6 +1,7 @@
-package com.util;
+package util;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 
@@ -13,7 +14,7 @@ public class ReadPropertiesFile {
     public static String readKey(String key) throws IOException {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         Properties props = new Properties();
-        try(InputStream resourceStream = loader.getResourceAsStream(propertiesFilename)) {
+        try (InputStream resourceStream = loader.getResourceAsStream(propertiesFilename)) {
             props.load(resourceStream);
         }
         return props.getProperty(key);

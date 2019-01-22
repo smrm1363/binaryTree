@@ -1,4 +1,4 @@
-package com.domain;
+package domain;
 
 /**
  * This is a Node
@@ -8,6 +8,7 @@ public class Node {
     private NodeData data;
     private Node left;
     private Node right;
+
     public Node(NodeData data) {
         this.data = data;
         left = right = null;

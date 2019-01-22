@@ -1,4 +1,4 @@
-package com.domain;
+package domain;
 
 /**
  * This is a data type for each Node
@@ -29,14 +29,13 @@ public class NodeData {
     }
 
     /**
-     *
      * @return a String for leaves with the word and total number of it
      */
     @Override
     public String toString() {
-        String result=" "+totalNumber.toString()+" ";
-        if(word!=null)
-            result = word+" "+result;
+        String result = " " + totalNumber.toString() + " ";
+        if (word != null)
+            result = word + " " + result;
         return result;
     }
 }

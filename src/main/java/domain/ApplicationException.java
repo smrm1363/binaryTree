@@ -1,4 +1,4 @@
-package com.domain;
+package domain;
 
 /**
  * This is an exception will throw with the application
